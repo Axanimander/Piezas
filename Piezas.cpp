@@ -50,7 +50,7 @@ Piece Piezas::dropPiece(int column)
     if(column > BOARD_COLS || column < 0){
         returnType = Invalid;
         
-    }else if(pieceAt(BOARD_ROWS - 1, column) != Blank){
+    }else if(pieceAt(2, column) != Blank){
         returnType = Blank;
     }else{
         for(int row = 0; row < BOARD_ROWS; row++){

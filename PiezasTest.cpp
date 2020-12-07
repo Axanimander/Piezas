@@ -38,6 +38,15 @@ TEST(PiezasTest, dropPiece_invalid_placement_is_invalid){
 	ASSERT_EQ(ret, Invalid);
 }
 
+TEST(Piezas, dropPiece_blank_if_col_full){
+	Piezas board = Piezas();
+	board.dropPiece(0);
+	board.dropPiece(0);
+	board.dropPiece(0);
+	Piece ret = board.dropPiece(0);
+	ASSERT_EQ(ret, Blank);
+}
+
 TEST(PiezasTest, gameState_invalid_if_game_not_over){
 	Piezas board = Piezas();
 	Piece ret = board.gameState();
@@ -57,4 +66,70 @@ TEST(PiezasTest, pieceAt_is_O_after_stack_on_X){
 	board.dropPiece(0);
 	Piece ret = board.pieceAt(1,0);
 	ASSERT_EQ(ret, O);
+}
+TEST(PiezasTest, pieceAt_Invalid_OOB){
+	Piezas board = Piezas();
+	Piece ret = board.pieceAt(-33, 21);
+	ASSERT_EQ(ret, Invalid);
+
+}
+
+TEST(PiezasTest, gameState_Blank_after_tie){
+	Piezas board = Piezas();
+	board.dropPiece(0); //X 
+	board.dropPiece(0); //O
+	board.dropPiece(0); //X
+	board.dropPiece(1); //O
+	board.dropPiece(1); //X
+	board.dropPiece(1); //O
+	board.dropPiece(2); //X
+	board.dropPiece(2); //O
+	board.dropPiece(2); //X
+	board.dropPiece(3); //O
+	board.dropPiece(3); //X
+	board.dropPiece(3); //O
+	Piece ret = board.gameState();
+	ASSERT_EQ(ret, Blank);
+}
+
+TEST(PiezasTest, gameState_O_after_O_Win_On_Col){
+	Piezas board = Piezas();
+	board.dropPiece(0); //X 
+	board.dropPiece(0); //O
+	board.dropPiece(0); //X
+	board.dropPiece(1); //O
+	board.dropPiece(-1); //X drop piece into void
+	board.dropPiece(1); //O
+	board.dropPiece(-1); //X
+	board.dropPiece(1); //O
+	board.dropPiece(2); //X
+	board.dropPiece(2); //O
+	board.dropPiece(2); //X
+	board.dropPiece(3); //O
+	board.dropPiece(3); //X
+	board.dropPiece(3); //O
+	Piece ret = board.gameState();
+	ASSERT_EQ(ret, O);
+}
+
+TEST(PiezasTest, gameState_X_after_X_Win_On_Row){
+	Piezas board = Piezas();
+	board.dropPiece(0); //X 
+	board.dropPiece(-1); //O
+	board.dropPiece(1); //X
+	board.dropPiece(-1); //O
+	board.dropPiece(2); //X
+	board.dropPiece(-1); //O
+	board.dropPiece(3); //X
+	board.dropPiece(0); //O
+	board.dropPiece(0); //X
+	board.dropPiece(1); //O
+	board.dropPiece(2); //X
+	board.dropPiece(2); //O
+	board.dropPiece(3); //X
+	board.dropPiece(3); //O
+	board.dropPiece(1); //X
+	
+	Piece ret = board.gameState();
+	ASSERT_EQ(ret, X);
 }
