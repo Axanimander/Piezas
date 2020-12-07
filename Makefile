@@ -27,6 +27,8 @@ test:
 	./PiezasTest
 	gcov -fbc Piezas.cpp
 
+dockerbuild:
+	bash -c "docker build -t gtest ."
 # Builds gtest.a and gtest_main.a.
 GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 

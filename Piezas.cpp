@@ -22,6 +22,8 @@
 **/
 Piezas::Piezas()
 {
+    turn = X;
+    reset();
 }
 
 /**
@@ -30,6 +32,8 @@ Piezas::Piezas()
 **/
 void Piezas::reset()
 {
+    turn = X;
+    board = std::vector<std::vector<Piece>>(BOARD_ROWS, std::vector<Piece>(BOARD_COLS, Blank));
 }
 
 /**
@@ -42,7 +46,23 @@ void Piezas::reset()
 **/ 
 Piece Piezas::dropPiece(int column)
 {
-    return Blank;
+    Piece returnType = Blank;
+    if(column > BOARD_COLS || column < 0){
+        returnType = Invalid;
+        
+    }else if(pieceAt(BOARD_ROWS - 1, column) != Blank){
+        returnType = Blank;
+    }else{
+        for(int row = 0; row < BOARD_ROWS; row++){
+            if(pieceAt(row, column) == Blank){
+                board[row][column] = turn;
+                returnType = turn;
+                break;
+            }
+        }
+    }
+    turn == X ? turn = O : turn = X;
+    return returnType;
 }
 
 /**
@@ -51,7 +71,10 @@ Piece Piezas::dropPiece(int column)
 **/
 Piece Piezas::pieceAt(int row, int column)
 {
-    return Blank;
+    if(row > BOARD_ROWS || row < 0 || column > BOARD_COLS || column < 0){
+        return Invalid;
+    }
+    return board[row][column];
 }
 
 /**
@@ -65,5 +88,46 @@ Piece Piezas::pieceAt(int row, int column)
 **/
 Piece Piezas::gameState()
 {
-    return Blank;
+    int colx = 0;
+    int colo = 0;
+    int rowx = 0;
+    int rowo = 0;
+    int maxx = 0;
+    int maxo = 0;
+    for(int x = 0; x < BOARD_ROWS; x++){
+        for(int y = 0; y < BOARD_COLS; y++){
+            if(board[x][y] == Blank){
+                return Invalid;
+            }if(board[x][y] == X){
+                colx++;
+            }else if(board[x][y] == O){
+                colo++;
+            }
+        }
+        if(maxx < colx){
+            maxx = colx;
+        }if(maxo < colo){
+            maxo = colo;
+        }
+    }
+    for(int y = 0; y < BOARD_COLS; y++){
+        for(int x = 0; x < BOARD_ROWS; x++){
+            if(board[x][y] == X){
+                rowx++;
+            }else if(board[x][y] == O){
+                rowo++;
+            }
+        }
+        if(maxx < rowx){
+            maxx = rowx;
+        }if(maxo < rowo){
+            maxo = rowo;
+        }
+    }
+
+    if(maxx == maxo){
+        return Blank;
+    }
+
+    return maxx > maxo ? X : O;
 }
